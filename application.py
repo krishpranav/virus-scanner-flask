@@ -20,7 +20,7 @@ UPLOAD_FOLDER = 'upload/'
 URL = 'https://www.virustotal.com/vtapi/v2/file/report'
 # replace it with your own api key
 # you can get it by signing up on https://www.virustotal.com/gui/join-us
-API_KEY = 'cdccfa9dc48fcfd4e39598112a100f8d268caab1cdfcc9a3e0fedc4dbd757151'
+API_KEY = '' #PUT YOUR API KEY
 
 
 def query_api(hash_value):
