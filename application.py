@@ -56,3 +56,34 @@ def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in 'txt'
 
 
+@application.route('/')
+def index():
+    return render_template('base.html')
+
+@application.route('/', methods=['POST'])
+def upload_generate_report():
+	"""Upload a txt file and display a query report"""
+	if request.method == 'POST':
+		# check if the post request has the file part
+		if 'file' not in request.files:
+			flash('No file part')
+			return redirect(request.url)
+		file = request.files['file']
+		if file.filename == '':
+			flash('Please upload a file before generating the report')
+			return redirect(request.url)
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			if not os.path.exists(UPLOAD_FOLDER):
+				os.makedirs(UPLOAD_FOLDER)
+			file_path = os.path.join(UPLOAD_FOLDER, filename)
+			file.save(file_path)
+			print('File successfully uploaded')
+			print('Start parsing file...')
+			df = retrieve_report(file_path)
+			print('Report generated')
+			return render_template('results.html', name="Virus Scan Report",
+								   tables=[df.to_html(classes='data table-hover ml-10', header="true")])
+		else:
+			flash('Allowed file type is txt')
+			return redirect(request.url)
