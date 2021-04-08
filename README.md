@@ -15,5 +15,6 @@ go to https://www.virustotal.com/gui/join-us and get your api key
 API_KEY = YOUR_OWN_API_KEY
 
 python3 application.py
-
 ```
+
+- Tool Author: krishpranav | https://github.com/krishpranav
