@@ -6,21 +6,25 @@ import numpy as np
 import pandas as pd
 import requests
 import time
-
+# flask utils
 from flask import Flask, flash, redirect, url_for, request, render_template
 from werkzeug.utils import secure_filename
 
+# define a flask app
 application = Flask(__name__)
+# application.secret_key = "secret_key"
 
+# define global variable
 UPLOAD_FOLDER = 'upload/'
-
+# retrieve info through web API
 URL = 'https://www.virustotal.com/vtapi/v2/file/report'
-
+# replace it with your own api key
+# you can get it by signing up on https://www.virustotal.com/gui/join-us
 API_KEY = 'cdccfa9dc48fcfd4e39598112a100f8d268caab1cdfcc9a3e0fedc4dbd757151'
 
 
 def query_api(hash_value):
-    	"""Query VirusTotal's API based on a given hash value"""
+	"""Query VirusTotal's API based on a given hash value"""
 	try:
 		params = {'apikey': API_KEY, 'resource': hash_value}
 		response = requests.get(URL, params=params)
@@ -55,11 +59,15 @@ def retrieve_report(uploaded_file_path):
 def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in 'txt'
 
-
+# @: decorator
+# map the url with the associated function
 @application.route('/')
 def index():
-    return render_template('base.html')
+	return render_template('base.html')
 
+
+# post: send the form data to the server
+# get: default setting, send data in the unencrypted form to the server (form info may be shown in the url)
 @application.route('/', methods=['POST'])
 def upload_generate_report():
 	"""Upload a txt file and display a query report"""
@@ -88,5 +96,7 @@ def upload_generate_report():
 			flash('Allowed file type is txt')
 			return redirect(request.url)
 
+
 if __name__ == "__main__":
-    application.run(debug=True, host="0.0.0.0")
+	# host: hostname to listen on. Set this to '0.0.0.0' to have the server available externally as well
+	application.run(debug=True, host="0.0.0.0")
