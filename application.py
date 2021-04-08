@@ -87,3 +87,6 @@ def upload_generate_report():
 		else:
 			flash('Allowed file type is txt')
 			return redirect(request.url)
+
+if __name__ == "__main__":
+    application.run(debug=True, host="0.0.0.0")
